@@ -6,28 +6,29 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SigningOverview {
+public class Transaction {
 
     @JsonProperty("Id")
     private String id;
     @JsonProperty("Status")
     private Integer status;
     @JsonProperty("Files")
-    private FileEntry files;
+    private Map<String, FileEntry> files;
     @JsonProperty("Seal")
     private Boolean seal;
     @JsonProperty("Signers")
     private List<Signer> signers;
     @JsonProperty("Receivers")
-    private List<Object> receivers;
+    private List<String> receivers;
     @JsonProperty("Reference")
-    private Object reference;
+    private String reference;
     @JsonProperty("PostbackUrl")
-    private Object postbackUrl;
+    private String postbackUrl;
     @JsonProperty("SignRequestMode")
     private Integer signRequestMode;
     @JsonProperty("DaysToExpire")
@@ -41,5 +42,5 @@ public class SigningOverview {
     @JsonProperty("CanceledDateTime")
     private String canceledDateTime;
     @JsonProperty("Context")
-    private Object context;
+    private String context;
 }

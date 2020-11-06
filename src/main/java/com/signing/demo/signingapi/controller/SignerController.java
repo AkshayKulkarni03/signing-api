@@ -28,6 +28,10 @@ public class SignerController {
                 verification.setSignerRequest(signer);
                 return verification;
             });
+            signer.getActivities().replaceAll(activitiy -> {
+                activitiy.setSignerRequest(signer);
+                return activitiy;
+            });
             return signer;
         });
 

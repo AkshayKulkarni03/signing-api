@@ -12,7 +12,7 @@ public class Signer {
     @JsonProperty("Id")
     public String id;
     @JsonProperty("Expires")
-    public Object expires;
+    public String expires;
     @JsonProperty("Email")
     public String email;
     @JsonProperty("Authentications")
@@ -20,11 +20,11 @@ public class Signer {
     @JsonProperty("Verifications")
     public List<Verification> verifications;
     @JsonProperty("Mobile")
-    public Object mobile;
+    public String mobile;
     @JsonProperty("Iban")
-    public Object iban;
+    public String iban;
     @JsonProperty("BSN")
-    public Object bSN;
+    public String bSN;
     @JsonProperty("RequireScribbleName")
     public Boolean requireScribbleName;
     @JsonProperty("RequireScribble")
@@ -52,29 +52,29 @@ public class Signer {
     @JsonProperty("Language")
     public String language;
     @JsonProperty("ScribbleName")
-    public Object scribbleName;
+    public String scribbleName;
     @JsonProperty("ScribbleNameFixed")
     public Boolean scribbleNameFixed;
     @JsonProperty("Reference")
-    public Object reference;
+    public String reference;
     @JsonProperty("IntroText")
-    public Object introText;
+    public String introText;
     @JsonProperty("ReturnUrl")
-    public Object returnUrl;
+    public String returnUrl;
     @JsonProperty("Activities")
     public List<Object> activities;
     @JsonProperty("RejectReason")
-    public Object rejectReason;
+    public String rejectReason;
     @JsonProperty("SignUrl")
     public String signUrl;
     @JsonProperty("SignedDateTime")
-    public Object signedDateTime;
+    public String signedDateTime;
     @JsonProperty("RejectDateTime")
-    public Object rejectDateTime;
+    public String rejectDateTime;
     @JsonProperty("CreatedDateTime")
     public String createdDateTime;
     @JsonProperty("ModifiedDateTime")
     public String modifiedDateTime;
     @JsonProperty("Context")
-    public Object context;
+    public String context;
 }

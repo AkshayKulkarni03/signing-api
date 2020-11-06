@@ -30,7 +30,10 @@ public class SignerRequest {
     private String signRequestMessage;
     private Integer daysToRemind;
 
-    @OneToMany(mappedBy = "signerRequest", orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "signerRequest", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Activities> activities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "signerRequest", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Verification> verifications = new ArrayList<>();
 
     @ManyToOne(optional = false)

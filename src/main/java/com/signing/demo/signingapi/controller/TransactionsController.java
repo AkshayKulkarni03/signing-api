@@ -1,15 +1,17 @@
 package com.signing.demo.signingapi.controller;
 
-import com.signing.demo.signingapi.model.SigningOverview;
 import com.signing.demo.signingapi.model.SigningOverviewRequest;
+import com.signing.demo.signingapi.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -32,13 +34,13 @@ public class TransactionsController {
     private String authKey;
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<SigningOverview> createTransaction(@RequestBody SigningOverviewRequest signingOverviewRequest) {
+    public ResponseEntity<Transaction> createTransaction(@RequestBody SigningOverviewRequest signingOverviewRequest) {
         HttpHeaders httpHeaders = getHttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<SigningOverviewRequest> entity = new HttpEntity<>(signingOverviewRequest, httpHeaders);
 
-        return restTemplate.postForEntity(evidosUrl, entity, SigningOverview.class);
+        return restTemplate.postForEntity(evidosUrl, entity, Transaction.class);
     }
 
     @PutMapping(path = "/{id}/file/{fileName}", consumes = MULTIPART_FORM_DATA_VALUE)
@@ -67,12 +69,30 @@ public class TransactionsController {
     }
 
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<SigningOverview> getTransaction(@PathVariable("id") String id) {
-        return restTemplate.getForEntity(evidosUrl + id, SigningOverview.class);
+    public ResponseEntity<Transaction> getTransaction(@PathVariable("id") String id) {
+        HttpEntity<Object> entity = new HttpEntity<>(getHttpHeaders());
+        return restTemplate.exchange(evidosUrl + id, HttpMethod.GET, entity, Transaction.class);
     }
 
     @GetMapping(path = "/{id}/file/{fileName}")
-    public void getSignedDocument(@PathVariable("id") String id, @PathVariable("fileName") String fileName) {
+    public ResponseEntity<StreamingResponseBody> getSignedDocument(@PathVariable("id") String id, @PathVariable("fileName") String fileName) {
+        HttpHeaders httpHeaders = getHttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+        HttpEntity<Object> entity = new HttpEntity<>(httpHeaders);
+
+        StreamingResponseBody stream = out -> {
+            ResponseEntity<byte[]> responseEntity = restTemplate.exchange(evidosUrl + id + "/file/" + fileName, HttpMethod.GET, entity, byte[].class);
+            System.out.println(responseEntity.getBody());
+            out.write(responseEntity.getBody());
+        };
+
+        HttpHeaders responseHttpHeaders = new HttpHeaders();
+        responseHttpHeaders.setContentType(MediaType.APPLICATION_PDF);
+        responseHttpHeaders.add("content-disposition", "inlinloe;filename=" + fileName);
+        responseHttpHeaders.setContentDispositionFormData(fileName, fileName);
+        responseHttpHeaders.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return ResponseEntity.ok().headers(responseHttpHeaders).body(stream);
     }
 
     private HttpHeaders getHttpHeaders() {

@@ -1,0 +1,33 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  servlet:
+    multipart:
+      enabled: true
+logging:
+  level:
+    '[org.hibernate.sql]': DEBUG
+
+signing:
+  app:
+    evidos:
+      base:
+        url: https://api.signhost.com/api/transaction/
+      application:
+        key: "APPKey UwjlW0D5m4eJuare GonveFGUitXVY8ZH0avLKWhNVemctLHl"
+      auth:
+        key: "APIKey QyV8vtDiyEOHHyGI0ttEBu2Wp4Rd2tqa"
